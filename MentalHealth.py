@@ -4,7 +4,7 @@ from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
 st.set_page_config(page_title="Mental Health Chatbot", page_icon="🧘", layout="centered")
 # Define the model location (Update with your actual Hugging Face model path)
-MODEL_NAME = "grpnair2003/Mental-Health-Chatbot/model.safetensors"
+MODEL_NAME = "grpnair2003/model.safetensors"
 
 @st.cache_resource()
 def load_model():
