@@ -1,5 +1,6 @@
 import streamlit as st
 import torch
+pip install torch torchvision torchaudio
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
 # Load model and tokenizer
