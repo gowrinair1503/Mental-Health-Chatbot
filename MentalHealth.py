@@ -1,19 +1,28 @@
 import streamlit as st
 import torch
-pip install torch torchvision torchaudio
+import requests
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
-# Load model and tokenizer
-MODEL_PATH = "model.safetensors"  # Update this to the correct path
+# Load model from Google Drive
+MODEL_URL = "YOUR_GOOGLE_DRIVE_FILE_LINK"  # Replace with your actual Google Drive link
+
 @st.cache_resource()
 def load_model():
-    tokenizer = GPT2Tokenizer.from_pretrained(MODEL_PATH)
-    model = GPT2LMHeadModel.from_pretrained(MODEL_PATH)
+    # Download the model file
+    model_path = "model.safetensors"
+    with open(model_path, "wb") as f:
+        f.write(requests.get(MODEL_URL).content)
+    
+    # Load tokenizer and model
+    tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
+    model = GPT2LMHeadModel.from_pretrained(model_path)
     model.eval()
     return tokenizer, model
 
+# Load the model
 tokenizer, model = load_model()
 
+# Function to generate a response
 def generate_response(user_input):
     input_text = user_input + " [SEP]"
     input_ids = tokenizer.encode(input_text, return_tensors="pt")
@@ -23,43 +32,63 @@ def generate_response(user_input):
         pad_token_id=tokenizer.eos_token_id, do_sample=True,
         top_k=50, temperature=0.7
     )
-    response = tokenizer.decode(output[:, input_ids.shape[-1]:][0], skip_special_tokens=True)
+    response = tokenizer.decode(output[0], skip_special_tokens=True)
     return response
 
-# Streamlit UI
-st.set_page_config(page_title="Mental Health Chatbot", layout="centered", initial_sidebar_state="expanded")
+# Streamlit UI - Pastel Theme
+st.set_page_config(page_title="Mental Health Chatbot", page_icon="💙", layout="centered")
+
+# Custom CSS for pastel colors and chat format
 st.markdown("""
     <style>
-    body {background-color: #FAF3E0; color: #333;}
-    .stApp {background-color: #FAF3E0;}
-    .chat-container {border-radius: 10px; padding: 10px;}
+        body {
+            background-color: #f7f3e9;
+            color: #333;
+        }
+        .stTextInput>div>div>input {
+            border: 2px solid #a3c9c7;
+            border-radius: 10px;
+            padding: 10px;
+        }
+        .stButton>button {
+            background-color: #a3c9c7;
+            color: white;
+            border-radius: 10px;
+            font-size: 16px;
+            padding: 8px 15px;
+        }
+        .stButton>button:hover {
+            background-color: #87b5b0;
+        }
     </style>
-    """, unsafe_allow_html=True)
-
-st.sidebar.title("🌙 Theme")
-mode = st.sidebar.radio("Choose Theme", ["Light", "Dark"])
-if mode == "Dark":
-    st.markdown("""
-    <style>
-    body {background-color: #2C2C2C; color: #FFF;}
-    .stApp {background-color: #2C2C2C;}
-    </style>
-    """, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
 st.title("🧘 Mental Health Chatbot")
-st.write("Your AI companion for mental well-being.")
+st.write("A calming chatbot to support your mental health. 💙")
 
-# Chat format
+# Chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
+# Display chat history
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
-        st.markdown(message["content"])
+        st.write(message["content"])
 
-user_input = st.text_input("You:", "", key="user_input")
-if st.button("Send") and user_input:
+# User input field
+user_input = st.chat_input("Type your message...")
+
+if user_input:
+    # Display user message
     st.session_state.messages.append({"role": "user", "content": user_input})
+    with st.chat_message("user"):
+        st.write(user_input)
+
+    # Generate bot response
     response = generate_response(user_input)
-    st.session_state.messages.append({"role": "bot", "content": response})
-    st.rerun()
+    st.session_state.messages.append({"role": "assistant", "content": response})
+    
+    # Display bot message
+    with st.chat_message("assistant"):
+        st.write(response)
+
