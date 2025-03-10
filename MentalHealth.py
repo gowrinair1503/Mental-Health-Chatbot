@@ -2,6 +2,7 @@ import streamlit as st
 import torch
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
+st.set_page_config(page_title="Mental Health Chatbot", page_icon="🧘", layout="centered")
 # Define the model location (Update with your actual Hugging Face model path)
 MODEL_NAME = "grpnair2003/Mental-Health-Chatbot/model.safetensors"
 
@@ -36,8 +37,8 @@ def generate_response(user_input):
     return tokenizer.decode(output[0], skip_special_tokens=True)
 
 # Streamlit UI
-st.set_page_config(page_title="Mental Health Chatbot", page_icon="🧠", layout="centered")
-st.title("🧠 Mental Health Chatbot")
+
+st.title("🧘 Mental Health Chatbot")
 st.write("I'm here to help. How do you feel today?")
 
 # Input box
