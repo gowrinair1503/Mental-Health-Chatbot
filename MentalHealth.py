@@ -4,7 +4,7 @@ import requests
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
 # Load model from Google Drive
-MODEL_URL = "https://drive.google.com/file/d/12_9u-6oSlhMa491-yS48DaEl2HMtxct3/view?usp=drive_link"  # Replace with your actual Google Drive link
+MODEL_URL = "grpnair2003/model.safetensors"  # Replace with your actual Google Drive link
 
 @st.cache_resource()
 def load_model():
