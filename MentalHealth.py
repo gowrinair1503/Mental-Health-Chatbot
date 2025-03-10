@@ -3,7 +3,7 @@ import torch
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
 # Define the model location (Update with your actual Hugging Face model path)
-MODEL_NAME = "grpnair2003/model.safetensors"
+MODEL_NAME = "grpnair2003/Mental-Health-Chatbot/blob/main/model.safetensors"
 
 @st.cache_resource()
 def load_model():
