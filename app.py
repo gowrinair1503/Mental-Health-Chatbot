@@ -11,8 +11,17 @@ model = AutoModelForCausalLM.from_pretrained(HF_MODEL_REPO, torch_dtype=torch.fl
 
 def generate_response(user_input):
     inputs = tokenizer(user_input, return_tensors="pt")
-    output = model.generate(**inputs, max_length=150)
+    output = model.generate(
+        **inputs, 
+        max_length=100,
+        pad_token_id=tokenizer.eos_token_id,
+        temperature=0.7,
+        top_k=50,
+        top_p=0.9,
+        repetition_penalty=1.2
+    )
     return tokenizer.decode(output[0], skip_special_tokens=True)
+
 
 # Streamlit App
 st.title("Mental Health Companion Chatbot")
