@@ -3,7 +3,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
 
 # Define your Hugging Face model repo
-HF_MODEL_REPO = "your-username/your-model-repo"  # Replace with your actual repo name
+HF_MODEL_REPO = "grpnair2003/Mental-Health-Campanion-Chatbot"  # Replace with your actual repo name
 
 # Load model and tokenizer from Hugging Face
 tokenizer = AutoTokenizer.from_pretrained(HF_MODEL_REPO)
