@@ -1,4 +1,5 @@
 ultralytics
+gdown
 opencv-python
 numpy
 streamlit
