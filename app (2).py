@@ -2,13 +2,13 @@ import streamlit as st
 import os
 import gdown
 import zipfile
+import json
 from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassification
 import torch
-import joblib
 import random
 
 MODEL_PATH = "mental_health_chatbot_model"
-ENCODER_PATH = "label_encoder (1).pkl"
+ENCODER_PATH = "label_encoder.json"
 
 @st.cache_resource
 def download_and_load():
@@ -24,12 +24,17 @@ def download_and_load():
 
     model = DistilBertForSequenceClassification.from_pretrained(MODEL_PATH)
     tokenizer = DistilBertTokenizerFast.from_pretrained(MODEL_PATH)
-    return model, tokenizer
 
-model, tokenizer = download_and_load()
-le = joblib.load(ENCODER_PATH)
+    # Load label encoder from JSON
+    with open(os.path.join(MODEL_PATH, ENCODER_PATH)) as f:
+        label_mapping = json.load(f)
+        id_to_label = {int(k): v for k, v in label_mapping.items()}
 
-# Basic response map (expand as needed)
+    return model, tokenizer, id_to_label
+
+model, tokenizer, id_to_label = download_and_load()
+
+# Basic response map
 response_map = {
     "greeting": ["Hello! I'm here to support your mental well-being."],
     "goodbye": ["Take care! You're not alone."],
@@ -42,7 +47,7 @@ def predict(text):
     with torch.no_grad():
         outputs = model(**inputs)
     pred_id = torch.argmax(outputs.logits, dim=1).item()
-    tag = le.inverse_transform([pred_id])[0]
+    tag = id_to_label.get(pred_id, "unknown")
     response = random.choice(response_map.get(tag, ["I'm here for you. Tell me more."]))
     return tag, response
 
@@ -55,4 +60,5 @@ user_input = st.text_input("You:", placeholder="I'm feeling anxious...")
 
 if st.button("Send") and user_input.strip():
     tag, reply = predict(user_input)
-    st.success(f"**Pandora ({tag})**: {reply}")
+    st.success(f"**Yara ({tag})**: {reply}")
+
