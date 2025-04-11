@@ -8,7 +8,7 @@ import torch
 import joblib
 from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassification
 
-MODEL_PATH = "mental_health_chatbot_model"
+MODEL_PATH = "mental_health_chatbot_model/"
 ENCODER_PATH = "label_encoder.json"
 
 @st.cache_resource
