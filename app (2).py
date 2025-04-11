@@ -8,7 +8,7 @@ import joblib
 import random
 
 MODEL_PATH = "mental_health_chatbot_model"
-ENCODER_PATH = "label_encoder.pkl"
+ENCODER_PATH = "label_encoder (1).pkl"
 
 @st.cache_resource
 def download_and_load():
