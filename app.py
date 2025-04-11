@@ -24,8 +24,8 @@ def generate_response(user_input):
 
 
 # Streamlit App
-st.title("Mental Health Companion Chatbot")
-st.write("A chatbot to support mental well-being. Type a message below.")
+st.title("Yara ")
+st.write("A chatbot to support mental well-being.")
 
 user_input = st.text_input("You:", "")
 
