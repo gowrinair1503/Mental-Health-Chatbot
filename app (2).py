@@ -21,7 +21,7 @@ def download_and_load():
         gdown.download(url, output, quiet=False)
 
         with zipfile.ZipFile(output, 'r') as zip_ref:
-            zip_ref.extractall()  # Extracts to current directory
+            zip_ref.extractall()  
 
     model = DistilBertForSequenceClassification.from_pretrained(MODEL_PATH)
     tokenizer = DistilBertTokenizerFast.from_pretrained(MODEL_PATH)
@@ -35,7 +35,7 @@ def download_and_load():
 
 model, tokenizer, id_to_label = download_and_load()
 
-# Basic response map (expand as needed)
+
 response_map = {
     "greeting": ["Hello! I'm here to support your mental well-being."],
     "goodbye": ["Take care! You're not alone."],
