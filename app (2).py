@@ -3,9 +3,10 @@ import os
 import gdown
 import zipfile
 import json
-from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassification
-import torch
 import random
+import torch
+import joblib
+from transformers import DistilBertTokenizerFast, DistilBertForSequenceClassification
 
 MODEL_PATH = "mental_health_chatbot_model"
 ENCODER_PATH = "label_encoder.json"
@@ -20,26 +21,25 @@ def download_and_load():
         gdown.download(url, output, quiet=False)
 
         with zipfile.ZipFile(output, 'r') as zip_ref:
-            zip_ref.extractall(MODEL_PATH)
+            zip_ref.extractall()  # Extracts to current directory
 
     model = DistilBertForSequenceClassification.from_pretrained(MODEL_PATH)
     tokenizer = DistilBertTokenizerFast.from_pretrained(MODEL_PATH)
 
-    # Load label encoder from JSON
-    with open(os.path.join(MODEL_PATH, ENCODER_PATH)) as f:
+    encoder_file_path = os.path.join(MODEL_PATH, ENCODER_PATH)
+    with open(encoder_file_path, "r") as f:
         label_mapping = json.load(f)
-        id_to_label = {int(k): v for k, v in label_mapping.items()}
+    id_to_label = {int(k): v for k, v in label_mapping.items()}
 
     return model, tokenizer, id_to_label
 
 model, tokenizer, id_to_label = download_and_load()
 
-# Basic response map
+# Basic response map (expand as needed)
 response_map = {
     "greeting": ["Hello! I'm here to support your mental well-being."],
     "goodbye": ["Take care! You're not alone."],
     "scared": ["It's okay to feel scared. Want to talk about it?"],
-    # Add more tags as needed
 }
 
 def predict(text):
@@ -47,7 +47,7 @@ def predict(text):
     with torch.no_grad():
         outputs = model(**inputs)
     pred_id = torch.argmax(outputs.logits, dim=1).item()
-    tag = id_to_label.get(pred_id, "unknown")
+    tag = id_to_label[pred_id]
     response = random.choice(response_map.get(tag, ["I'm here for you. Tell me more."]))
     return tag, response
 
@@ -61,4 +61,3 @@ user_input = st.text_input("You:", placeholder="I'm feeling anxious...")
 if st.button("Send") and user_input.strip():
     tag, reply = predict(user_input)
     st.success(f"**Yara ({tag})**: {reply}")
-
