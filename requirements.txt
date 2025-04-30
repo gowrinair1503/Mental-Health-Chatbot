@@ -1,8 +1,0 @@
-ultralytics
-gdown
-transformers
-opencv-python
-numpy
-streamlit
-Pillow
-joblib
