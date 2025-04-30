@@ -1,0 +1,6 @@
+flask
+torch
+transformers
+safetensors
+scikit-learn
+numpy
