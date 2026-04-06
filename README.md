@@ -5,7 +5,6 @@ This project presents an intelligent mental health chatbot that uses Natural Lan
 
 It also ensures user safety by recommending professional help when necessary.
 
----
 
 ## Objectives
 - Develop a chatbot capable of understanding user emotions using NLP  
@@ -14,7 +13,6 @@ It also ensures user safety by recommending professional help when necessary.
 - Allow users to accept or reject suggestions and receive alternatives  
 - Promote mental well-being through guided assistance  
 
----
 
 ## Features
 - Detection of multiple mental health conditions:
@@ -37,7 +35,6 @@ It also ensures user safety by recommending professional help when necessary.
 - Suggestion to seek professional help when required  
 - Simple, calm, and user-friendly interface  
 
----
 
 ## Technologies Used
 - Python  
@@ -46,6 +43,20 @@ It also ensures user safety by recommending professional help when necessary.
 - HTML, CSS  
 - Google Colab  
 
----
 
-## Project Structure
+## Dataset
+A custom dataset is used with the following fields:
+- User Input  
+- Bot Initial Response  
+- Follow-up Response (Yes)  
+- Follow-up Response (No)  
+
+The dataset includes multiple mental health scenarios to improve chatbot performance.
+
+## Future Enhancements
+- Add Reinforcement Learning
+- Real-time chat interface  
+- Voice-based interaction  
+- Advanced emotion detection using deep learning  
+- Cloud deployment  
+- Multilingual support  
